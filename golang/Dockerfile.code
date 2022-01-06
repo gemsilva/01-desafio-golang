@@ -1,0 +1,17 @@
+FROM golang:1.16-alpine3.15 as builder
+
+WORKDIR /app
+
+COPY go.mod ./
+COPY go.sum ./
+COPY main.go ./
+
+RUN go build -o main main.go
+
+FROM hello-world
+
+WORKDIR /app
+
+COPY --from=builder /app/main /app
+
+CMD [ "/app/main" ] 
